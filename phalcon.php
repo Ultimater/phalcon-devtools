@@ -20,6 +20,9 @@
   +------------------------------------------------------------------------+
 */
 
+// Note that the "Phalcon\" namespace below uses composer psr-4 and links to "scripts/Phalcon/"
+// This is only if it's not found within cphalcon
+
 use Phalcon\Script;
 use Phalcon\Script\Color;
 use Phalcon\Devtools\Version;
@@ -43,8 +46,11 @@ use Phalcon\Events\Manager as EventsManager;
 try {
     require dirname(__FILE__) . '/bootstrap/autoload.php';
 
-    $vendor = sprintf('Phalcon DevTools (%s)', Version::get());
-    print PHP_EOL . Color::colorize($vendor, Color::FG_GREEN, Color::AT_BOLD) . PHP_EOL . PHP_EOL;
+	// Yes, this message displays for every hit to devtools
+	echo Color::colorize(
+		sprintf('%sPhalcon DevTools (%s)%s%s', PHP_EOL, Version::get(), PHP_EOL, PHP_EOL),
+		Color::FG_GREEN, Color::AT_BOLD
+	);
 
     $eventsManager = new EventsManager();
 
@@ -67,6 +73,7 @@ try {
         Console::class,
     ];
 
+	// Allows user commands via .phalcon/project.ini
     $script->loadUserScripts();
 
     foreach ($commandsToEnable as $command) {
